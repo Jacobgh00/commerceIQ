@@ -24,3 +24,18 @@ export async function searchProductsByName(query: string): Promise<Array<Product
 
     return data as Array<Product>
 }
+
+export async function getProductBySlug(slug: string): Promise<Product | null> {
+    const { data, error} = await supabase
+        .from('products')
+        .select('*')
+        .eq('slug', slug)
+        .single()
+
+    if (error) {
+        console.error("Error fetching product", error);
+        return null
+    }
+
+    return data as Product
+}
