@@ -1,7 +1,7 @@
 import Link from "next/link";
 import {cn} from "@/lib/utils";
-import {TrolleyIcon} from "@sanity/icons";
 import {Renderable} from "@/utilities/ComponentUtilities";
+import {ShoppingCart} from "lucide-react";
 
 export function CartButton(): Renderable {
     return (
@@ -13,7 +13,7 @@ export function CartButton(): Renderable {
                 'text-white font-bold py-2 px-4 rounded transition-colors'
             )}
         >
-            <TrolleyIcon className="size-6" />
+            <ShoppingCart className="size-6" />
             <span>Min Kurv</span>
         </Link>
     );

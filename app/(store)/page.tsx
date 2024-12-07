@@ -1,12 +1,18 @@
-import {Button} from "@/components/ui/button";
+import {getAllProducts} from "@/supabase/products/ProductQuery";
+import {ProductsView} from "@/components/products/ProductsView";
+import {getAllCategories} from "@/supabase/categories/CategoriesQuery";
+import {BlackFridayBanner} from "@/components/banners/BlackFridayBanner";
 
-export default function Home() {
-  return (
-    <div>
-      <h1>HELLO world 123</h1>
-        <Button>
-            CLICK ME
-        </Button>
-    </div>
-  );
+export default async function Home() {
+    const products = await getAllProducts()
+    const categories = await getAllCategories()
+
+    return (
+        <div>
+            <BlackFridayBanner />
+            <div>
+                <ProductsView products={products} categories={categories}/>
+            </div>
+        </div>
+    );
 }
