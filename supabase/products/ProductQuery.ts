@@ -10,3 +10,17 @@ export async function getAllProducts(): Promise<Array<Product>> {
     }
     return data as Array<Product>
 }
+
+export async function searchProductsByName(query: string): Promise<Array<Product>> {
+    const { data, error} = await supabase
+        .from('products')
+        .select('*')
+        .or(`name.ilike.%${query}%,description.ilike.%${query}%`)
+
+    if (error) {
+        console.error("Error fetching products", error);
+        return []
+    }
+
+    return data as Array<Product>
+}
