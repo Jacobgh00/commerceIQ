@@ -39,3 +39,24 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
 
     return data as Product
 }
+
+export async function getProductsByCategory(categorySlug: string): Promise<Array<Product>> {
+    const { data, error } = await supabase
+        .from("product_categories")
+        .select(`
+            products!product_categories_product_id_fkey (*),
+            categories!product_categories_category_id_fkey (slug)
+        `)
+        .eq("categories.slug", categorySlug);
+
+    if (error) {
+        console.error("Error fetching products by category:", error);
+        return [];
+    }
+
+    const filteredProducts = data
+        ?.filter((item: any) => item.categories?.slug === categorySlug)
+        ?.map((item: any) => item.products) || [];
+
+    return filteredProducts as Array<Product>;
+}

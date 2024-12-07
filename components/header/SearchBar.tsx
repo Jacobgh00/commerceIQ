@@ -16,7 +16,7 @@ export function SearchBar(): Renderable {
                     placeholder="Søg efter produkter"
                     className={cn(
                         'bg-gray-100 text-gray-800 px-4 py-2 pl-10 rounded',
-                        'focus:outline-none focus:ring-blue-500 focus:ring-opacity-50',
+                        'focus:outline-none focus:ring-emerald-500 focus:ring-2 focus:ring-opacity-100',
                         'border w-full max-w-4xl'
                     )}
                 />

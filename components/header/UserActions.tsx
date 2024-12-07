@@ -25,7 +25,7 @@ export function UserActions(): Renderable {
                     href="/orders"
                     className={cn(
                         'flex-1 relative flex justify-center sm:justify-start sm:flex-none',
-                        'items-center gap-2 bg-blue-500 hover:bg-blue-700',
+                        'items-center gap-2 bg-emerald-500 hover:bg-emerald-700',
                         'text-white font-bold py-2 px-4 rounded transition-colors'
                     )}
                 >
@@ -51,9 +51,9 @@ export function UserActions(): Renderable {
                     type="button"
                     onClick={createClerkPasskey}
                     className={cn(
-                        'bg-white hover:bg-blue-700 hover:text-white',
-                        'animate-pulse text-blue-500 font-bold px-4 py-2 rounded',
-                        'border-blue-300 border transition-all'
+                        'bg-white hover:bg-emerald-700 hover:text-white',
+                        'animate-pulse text-emerald-500 font-bold px-4 py-2 rounded',
+                        'border-emerald-300 border transition-all'
                     )}
                 >
                     Opret passkey

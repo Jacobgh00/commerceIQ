@@ -7,7 +7,7 @@ export function Logo(): Renderable {
         <Link
             href="/"
             className={cn(
-                'text-2xl font-bold text-blue-500',
+                'text-2xl font-bold text-emerald-500',
                 'hover:opacity-50 cursor-pointer mx-auto sm:mx-0 transition-all'
             )}
         >

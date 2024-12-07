@@ -9,7 +9,7 @@ export function CartButton(): Renderable {
             href="/basket"
             className={cn(
                 'flex-1 relative flex justify-center sm:justify-start sm:flex-none',
-                'items-center gap-2 bg-blue-500 hover:bg-blue-700',
+                'items-center gap-2 bg-emerald-500 hover:bg-emerald-700',
                 'text-white font-bold py-2 px-4 rounded transition-colors'
             )}
         >
