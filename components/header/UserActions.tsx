@@ -4,7 +4,7 @@ import {Renderable} from "@/utilities/ComponentUtilities";
 import {ClerkLoaded, SignedIn, SignInButton, UserButton, useUser} from "@clerk/nextjs";
 import Link from "next/link";
 import {cn} from "@/lib/utils";
-import {PackageIcon} from "@sanity/icons";
+import {PackageIcon} from "lucide-react";
 
 export function UserActions(): Renderable {
     const { user } = useUser();
