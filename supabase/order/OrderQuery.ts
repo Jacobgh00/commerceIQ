@@ -5,6 +5,53 @@ import {Order} from "@/supabase/types/OrderType";
 import {Product} from "@/supabase/types/ProductType";
 
 
+export async function getOrderCounts(): Promise<{totalOrders: number, activeOrders: number}> {
+    const { data: totalOrders, error: totalOrdersError } = await supabase
+        .from("orders")
+        .select("*", { count: "exact" });
+
+    const { data: activeOrders, error: activeOrdersError } = await supabase
+        .from("orders")
+        .select("*", { count: "exact" })
+        .eq("status", ["pending", "paid"]);
+
+    if (totalOrdersError || activeOrdersError) {
+        console.error("Error fetching order counts:", totalOrdersError?.message, activeOrdersError?.message);
+        return {totalOrders: 0, activeOrders: 0};
+    }
+
+    return {
+        totalOrders: totalOrders?.length || 0,
+        activeOrders: activeOrders?.length || 0,
+    };
+}
+
+export async function getOrderEvolution(): Promise<Array<{ date: string; orders: number }>> {
+    const { data, error } = await supabase
+        .from("orders")
+        .select("created_at")
+        .order("created_at", { ascending: true });
+
+    if (error) {
+        console.error("Error fetching order evolution:", error);
+        return [];
+    }
+
+    const groupedOrders = data.reduce((acc: Record<string, number>, order) => {
+        const date = new Date(order.created_at).toLocaleDateString("da-DK", {
+            year: "numeric",
+            month: "short",
+        });
+        acc[date] = (acc[date] || 0) + 1;
+        return acc;
+    }, {});
+
+    return Object.entries(groupedOrders).map(([date, orders]) => ({
+        date,
+        orders,
+    }));
+}
+
 export async function getUserOrders(userId: string): Promise<Array<Order>> {
     const { data, error } = await supabase
         .from("orders")
