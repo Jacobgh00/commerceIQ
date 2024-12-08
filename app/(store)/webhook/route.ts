@@ -35,6 +35,7 @@ export async function POST(req: NextRequest) {
         try {
             await createOrderInSupabase(session)
         } catch (error) {
+            console.error("Error creating order:", error);
             return NextResponse.json({error: "Error creating order"}, {status: 500});
         }
     }
@@ -97,11 +98,5 @@ async function fetchLineItemsFromStripe(sessionId: string) {
 }
 
 function isValidMetadata(metadata: Stripe.Metadata | null): metadata is Metadata {
-    return (
-        metadata !== null &&
-        true &&
-        true &&
-        true &&
-        true
-    );
+    return metadata !== null && true;
 }

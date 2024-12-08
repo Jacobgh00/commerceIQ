@@ -1,4 +1,3 @@
-
 import {searchProductsByName} from "@/supabase/products/ProductQuery";
 import {Renderable} from "@/utilities/ComponentUtilities";
 import {ProductGrid} from "@/components/products/ProductGrid";
