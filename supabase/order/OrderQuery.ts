@@ -1,6 +1,43 @@
 import {Metadata} from "@/action/CreateCheckoutSession";
 import {supabase} from "@/supabase/server";
 import Stripe from "stripe";
+import {Order} from "@/supabase/types/OrderType";
+import {Product} from "@/supabase/types/ProductType";
+
+
+export async function getUserOrders(userId: string): Promise<Array<Order>> {
+    const { data, error } = await supabase
+        .from("orders")
+        .select(`
+            *,
+            order_items (
+                quantity,
+                product:products (
+                    id,
+                    name,
+                    image_url,
+                    price
+                )
+            )
+        `)
+        .eq("clerk_user_id", userId)
+        .order("order_date", { ascending: false });
+
+    if (error) {
+        console.error("Error getting user orders:", error.message);
+        throw new Error("Failed to get user orders.");
+    }
+
+    return (
+        data?.map((order) => ({
+            ...order,
+            products: order.order_items.map((item: { quantity: number; product: Product }) => ({
+                product: item.product,
+                quantity: item.quantity,
+            })),
+        })) || []
+    );
+}
 
 
 export async function saveOrder({
