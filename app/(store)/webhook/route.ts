@@ -3,7 +3,6 @@ import {headers} from "next/headers";
 import Stripe from "stripe";
 import stripe from "@/lib/stripe";
 import {Metadata} from "@/action/CreateCheckoutSession";
-import {supabase} from "@/supabase/server";
 import {prepareOrderItems, saveOrder, saveOrderItems} from "@/supabase/order/OrderQuery";
 import {updateProductStocks} from "@/supabase/products/ProductQuery";
 

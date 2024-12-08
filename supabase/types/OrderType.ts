@@ -1,3 +1,4 @@
+import {OrderItem} from "@/supabase/types/OrderItemType";
 
 export interface Order {
     id: number
@@ -14,4 +15,6 @@ export interface Order {
     status: 'pending' | 'paid' | 'shipped' | 'delivered' | 'canceled'
     order_date: string
     created_at: string
+    products: Array<OrderItem>
 }
+
