@@ -1,8 +1,8 @@
-import {Renderable} from "@/utilities/ComponentUtilities";
 import {getProductBySlug} from "@/supabase/products/ProductQuery";
 import {notFound} from "next/navigation";
 import {cn} from "@/lib/utils";
 import Image from "next/image";
+import {AddToBasketButton} from "@/components/products/AddToBasketButton";
 
 export default async function ProductPage({
     params
@@ -51,6 +51,10 @@ export default async function ProductPage({
                         <div className="prose max-w-none mb-6">
                             {product.description}
                         </div>
+                    </div>
+
+                    <div className="mt-6">
+                        <AddToBasketButton product={product} disabled={isOutOfStock}/>
                     </div>
                 </div>
             </div>

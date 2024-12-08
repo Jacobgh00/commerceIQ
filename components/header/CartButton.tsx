@@ -3,7 +3,9 @@ import {cn} from "@/lib/utils";
 import {Renderable} from "@/utilities/ComponentUtilities";
 import {ShoppingCart} from "lucide-react";
 
-export function CartButton(): Renderable {
+export function CartButton(props: {
+    itemCount: number
+}): Renderable {
     return (
         <Link
             href="/basket"
@@ -14,6 +16,9 @@ export function CartButton(): Renderable {
             )}
         >
             <ShoppingCart className="size-6" />
+            <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full size-5 flex items-center justify-center text-xs">
+                {props.itemCount}
+            </span>
             <span>Min Kurv</span>
         </Link>
     );
