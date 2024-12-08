@@ -44,7 +44,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({received: true})
 }
 
-export async function createOrderInSupabase(session: Stripe.Checkout.Session) {
+async function createOrderInSupabase(session: Stripe.Checkout.Session) {
     const {
         id: sessionId,
         amount_total,
