@@ -4,6 +4,9 @@ import {cn} from "@/lib/utils";
 import Image from "next/image";
 import {AddToBasketButton} from "@/components/products/AddToBasketButton";
 
+export const dynamic = "force-static"
+export const revalidate = 60
+
 export default async function ProductPage({
     params
 }: { params: Promise<{ slug: string }> }) {
