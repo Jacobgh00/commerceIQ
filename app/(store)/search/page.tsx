@@ -1,11 +1,12 @@
 import {searchProductsByName} from "@/supabase/products/ProductQuery";
-import {Renderable} from "@/utilities/ComponentUtilities";
 import {ProductGrid} from "@/components/products/ProductGrid";
 
-export default async function SearchPage(props: {
-    searchParams: { query: string }
-}): Promise<Renderable> {
-    const { query } = await props.searchParams;
+export default async function SearchPage({
+    searchParams,
+} : {
+    searchParams: Promise<{ query: string }>
+}){
+    const { query } = await searchParams;
     const products = await searchProductsByName(query)
 
     if (!products.length) {
