@@ -1,5 +1,6 @@
 import {Product} from "@/supabase/types/ProductType";
 import {supabase} from "@/supabase/server";
+import {rollbackOrder} from "@/supabase/order/OrderQuery";
 
 export async function getAllProducts(): Promise<Array<Product>> {
     const { data, error} = await supabase.from('products').select('*');
@@ -59,4 +60,43 @@ export async function getProductsByCategory(categorySlug: string): Promise<Array
         ?.map((item: any) => item.products) || [];
 
     return filteredProducts as Array<Product>;
+}
+
+export async function updateProductStocks(orderId: number, items: Array<{ product_id: string; quantity: number }>) {
+    for (const item of items) {
+        const { data: product, error: fetchError } = await supabase
+            .from("products")
+            .select("stock")
+            .eq("id", item.product_id)
+            .single();
+
+        if (fetchError || !product) {
+            console.error(`Error fetching stock for product ID ${item.product_id}:`, fetchError?.message);
+
+            await rollbackOrder(orderId);
+
+            throw new Error(`Failed to fetch stock for product ID ${item.product_id}`);
+        }
+
+        const newStock = product.stock - item.quantity;
+
+        if (newStock < 0) {
+            throw new Error(`Not enough stock for product ID ${item.product_id}`);
+        }
+
+        const { error: stockError } = await supabase
+            .from("products")
+            .update({ stock: newStock })
+            .eq("id", item.product_id);
+
+        if (stockError) {
+            console.error(`Error updating stock for product ID ${item.product_id}:`, stockError.message);
+
+            await rollbackOrder(orderId);
+
+            throw new Error(`Failed to update stock for product ID ${item.product_id}`);
+        }
+
+        console.log(`Updated stock for product ID ${item.product_id}: Remaining stock ${newStock}`);
+    }
 }

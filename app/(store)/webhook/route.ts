@@ -4,6 +4,8 @@ import Stripe from "stripe";
 import stripe from "@/lib/stripe";
 import {Metadata} from "@/action/CreateCheckoutSession";
 import {supabase} from "@/supabase/server";
+import {prepareOrderItems, saveOrder, saveOrderItems} from "@/supabase/order/OrderQuery";
+import {updateProductStocks} from "@/supabase/products/ProductQuery";
 
 
 export async function POST(req: NextRequest) {
@@ -49,58 +51,58 @@ export async function createOrderInSupabase(session: Stripe.Checkout.Session) {
         customer,
     } = session;
 
+    if (!metadata || !isValidMetadata(metadata)) {
+        throw new Error("Invalid metadata in session");
+    }
+
     const { orderNumber, customerName, customerEmail, clerkUserId } = metadata as Metadata;
 
+    const customerId =
+        typeof customer === "string"
+            ? customer
+            : customer && "id" in customer
+                ? customer.id
+                : undefined;
+
+    if (!customerId) {
+        throw new Error("Invalid customer in session");
+    }
+
+    const lineItems = await fetchLineItemsFromStripe(sessionId);
+
+    const items = prepareOrderItems(lineItems);
+
+    const order = await saveOrder({
+        sessionId,
+        amount_total,
+        metadata,
+        customer: customerId,
+        orderNumber,
+        customerName,
+        customerEmail,
+        clerkUserId,
+    });
+
+    await saveOrderItems(order.id, items);
+
+    await updateProductStocks(order.id, items);
+
+    console.log("Order and items saved successfully!");
+}
+
+async function fetchLineItemsFromStripe(sessionId: string) {
     const lineItems = await stripe.checkout.sessions.listLineItems(sessionId, {
         expand: ["data.price.product"],
     });
+    return lineItems.data;
+}
 
-    const items = lineItems.data.map((item) => ({
-        product_id: (item.price?.product as Stripe.Product)?.metadata?.id,
-        quantity: item.quantity ?? 0,
-    }));
-
-    const { data: order, error: orderError } = await supabase
-        .from("orders")
-        .insert({
-            order_number: orderNumber,
-            stripe_checkout_session_id: sessionId,
-            stripe_customer_id: customer as string | undefined,
-            clerk_user_id: clerkUserId,
-            customer_name: customerName,
-            email: customerEmail,
-            total_price: amount_total ? amount_total / 100 : 0,
-            currency: "dkk",
-            amount_discount: 0,
-            status: "paid",
-            order_date: new Date().toISOString(),
-        })
-        .select()
-        .single();
-
-    if (orderError) {
-        console.error("Error saving order:", orderError.message);
-        throw new Error("Failed to save the order.");
-    }
-
-    const { error: itemsError } = await supabase
-        .from("order_items")
-        .insert(items.map((item) => ({ ...item, order_id: order.id })));
-
-    if (itemsError) {
-        console.error("Error saving order items:", itemsError.message);
-
-        const {error: rollbackError} = await supabase
-            .from("orders")
-            .delete()
-            .eq("id", order.id);
-
-        if (rollbackError) {
-            console.error("Rollback failed:", rollbackError.message);
-        }
-
-        throw new Error("Failed to save order items.");
-    }
-
-    console.log("Order and items saved successfully!");
+function isValidMetadata(metadata: Stripe.Metadata | null): metadata is Metadata {
+    return (
+        metadata !== null &&
+        true &&
+        true &&
+        true &&
+        true
+    );
 }
