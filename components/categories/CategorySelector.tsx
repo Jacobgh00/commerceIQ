@@ -1,7 +1,7 @@
 'use client'
 
 import {Category} from "@/supabase/types/CategoryType";
-import {JSX, useState} from "react";
+import {useState} from "react";
 import {useRouter} from "next/navigation";
 import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
 import {Button} from "@/components/ui/button";
