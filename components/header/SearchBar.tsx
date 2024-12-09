@@ -1,14 +1,19 @@
-import {Renderable} from "@/utilities/ComponentUtilities";
+import {ClassName, Renderable} from "@/utilities/ComponentUtilities";
 import Form from "next/form";
 import {cn} from "@/lib/utils";
 import {Search} from "lucide-react";
 
-export function SearchBar(): Renderable {
+export function SearchBar(props: {
+    className?: ClassName
+    action?: string
+}): Renderable {
     return (
         <Form
-            action="/search"
-            className="w-full sm:w-auto sm:flex-1 sm:mx-4 mt-2 sm:mt-0"
+            action={props.action ?? "/search"}
+            className={cn(props.className)}
         >
+            <input type="hidden" name="section" value="products"/>
+
             <div className="relative">
                 <input
                     type="text"

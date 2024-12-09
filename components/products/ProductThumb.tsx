@@ -1,5 +1,4 @@
 import {Product} from "@/supabase/types/ProductType";
-import {Renderable} from "@/utilities/ComponentUtilities";
 import Link from "next/link";
 import {cn} from "@/lib/utils";
 import Image from "next/image";
@@ -7,7 +6,7 @@ import {formatCurrency} from "@/lib/formatCurrency";
 
 export function ProductThumb(props: {
     product: Product
-}): Renderable {
+}){
     const isOutOfStock = props.product.stock !== null && props.product.stock <= 0;
 
     return (
@@ -27,7 +26,7 @@ export function ProductThumb(props: {
                         fill
                         priority
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                        className="object-contain transition-transform duration-300 group-hover:scale-110"
+                        className="object-contain transition-transform duration-300 group-hover:scale-110 p-5"
                     />
                 )}
 
@@ -38,12 +37,13 @@ export function ProductThumb(props: {
                 )}
             </div>
 
-            <div className="p-4">
+            <div className="prose p-4">
                 <h2 className="text-lg font-semibold text-gray-800 truncate">
                     {props.product.name}
                 </h2>
-                <p className="mt-2 text-sm text-gray-600 line-clamp-2">
-                    {props.product.description}
+                <p className="prose mt-2 text-sm text-gray-600 line-clamp-2"
+                    dangerouslySetInnerHTML={{__html: props.product.description}}
+                >
                 </p>
                 <p className="mt-2 text-lg font-bold text-gray-900">
                     {formatCurrency(props.product.price, "dkk")}

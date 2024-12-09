@@ -38,7 +38,7 @@ export function Header(): Renderable {
 
             {!isAdminPage && (
                 <div className="hidden md:block flex-1">
-                    <SearchBar />
+                    <SearchBar className="w-full sm:w-auto sm:flex-1 sm:mx-4 mt-2 sm:mt-0"/>
                 </div>
             )}
 

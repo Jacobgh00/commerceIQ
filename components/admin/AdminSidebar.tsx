@@ -47,8 +47,8 @@ export function AdminSidebar(props: {
                 ))}
             </ul>
             {isPending && (
-                <div className="fixed inset-0 flex justify-center items-center bg-white bg-opacity-75">
-                    <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-emerald-500"></div>
+                <div className="fixed inset-0 flex justify-center items-center bg-white bg-opacity-75 z-50">
+                    <div className="animate-spin rounded-full size-32 border-b-2 border-emerald-500"></div>
                 </div>
             )}
         </nav>
