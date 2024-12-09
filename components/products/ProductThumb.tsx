@@ -3,6 +3,7 @@ import {Renderable} from "@/utilities/ComponentUtilities";
 import Link from "next/link";
 import {cn} from "@/lib/utils";
 import Image from "next/image";
+import {formatCurrency} from "@/lib/formatCurrency";
 
 export function ProductThumb(props: {
     product: Product
@@ -26,7 +27,7 @@ export function ProductThumb(props: {
                         fill
                         priority
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                        className="object-contain transition-transform duration-300 group-hover:scale-105 pt-2"
+                        className="object-contain transition-transform duration-300 group-hover:scale-110"
                     />
                 )}
 
@@ -45,7 +46,7 @@ export function ProductThumb(props: {
                     {props.product.description}
                 </p>
                 <p className="mt-2 text-lg font-bold text-gray-900">
-                    KR. {props.product.price?.toFixed(2)}
+                    {formatCurrency(props.product.price, "dkk")}
                 </p>
             </div>
         </Link>

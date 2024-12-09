@@ -11,9 +11,9 @@ export default async function Home() {
     const categories = await getAllCategories()
 
     return (
-        <div>
+        <div className="flex flex-col gap-8 bg-gray-50">
             <BlackFridayBanner />
-            <div>
+            <div className="flex px-4 w-full">
                 <ProductsView products={products} categories={categories}/>
             </div>
         </div>
