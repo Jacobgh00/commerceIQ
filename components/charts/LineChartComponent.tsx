@@ -2,6 +2,7 @@
 
 import { LineChart } from "@mui/x-charts/LineChart";
 import {useEffect, useRef, useState} from "react";
+import {MotionDiv} from "@/types/Motion";
 
 export function LineChartComponent(props: {
     title: string
@@ -34,8 +35,11 @@ export function LineChartComponent(props: {
     }, []);
 
     return (
-        <div
+        <MotionDiv
             ref={containerRef}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
             className="bg-white shadow rounded-lg p-6 relative"
         >
             <h2 className="text-lg font-bold mb-4">{props.title}</h2>
@@ -47,6 +51,6 @@ export function LineChartComponent(props: {
                 height={dimensions.height}
                 grid={{vertical: true, horizontal: true}}
             />
-        </div>
+        </MotionDiv>
     )
 }

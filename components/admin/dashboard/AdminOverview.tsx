@@ -2,10 +2,11 @@ import {formatCurrency} from "@/lib/formatCurrency";
 import {MetricCard} from "@/components/admin/dashboard/MetricCard";
 import {LineChartComponent} from "@/components/charts/LineChartComponent";
 import {getDashboardData} from "@/supabase/dashboard/DashboardQuery";
+import {Renderable} from "@/utilities/ComponentUtilities";
 
 
 
-export async function AdminOverview() {
+export async function AdminOverview(): Promise<Renderable> {
     const {
         totalSales,
         totalOrders,

@@ -1,6 +1,5 @@
 import {getActiveSaleByCouponCode} from "@/supabase/sale/SaleQuery";
 import {CouponCodes} from "@/supabase/sale/CouponCodes";
-import {Gift} from "lucide-react";
 
 export async function BlackFridayBanner() {
     const sale = await getActiveSaleByCouponCode(CouponCodes.BLACK_FRIDAY);
@@ -14,7 +13,6 @@ export async function BlackFridayBanner() {
             <div className="container mx-auto flex flex-col md:flex-row items-center justify-between">
                 <div className="flex-1 text-center md:text-left">
                     <h2 className="text-4xl sm:text-6xl font-extrabold tracking-tight mb-4 animate-pulse">
-                        <Gift className="inline-block mr-2 text-white size-12 pb-2"/>
                         {sale.title}
                     </h2>
                     <p className="text-xl sm:text-2xl font-medium mb-6">
