@@ -15,7 +15,7 @@ export function AdminButton(): Renderable {
 
     return (
         <Link
-            href="/admin/dashboard"
+            href="/admin"
             className={cn(
                 'flex-1 relative flex justify-center sm:justify-start sm:flex-none',
                 'items-center gap-2 bg-emerald-500 hover:bg-emerald-700',

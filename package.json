@@ -9,7 +9,12 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@clerk/clerk-sdk-node": "^5.0.74",
     "@clerk/nextjs": "^6.8.0",
+    "@emotion/react": "^11.13.5",
+    "@emotion/styled": "^11.13.5",
+    "@mui/material": "^6.1.10",
+    "@mui/x-charts": "^7.23.1",
     "@radix-ui/react-dialog": "^1.1.2",
     "@radix-ui/react-popover": "^1.1.2",
     "@radix-ui/react-slot": "^1.1.0",

@@ -12,6 +12,19 @@ export async function getAllProducts(): Promise<Array<Product>> {
     return data as Array<Product>
 }
 
+export async function getProductCount(): Promise<number> {
+    const { data, error } = await supabase
+        .from("products")
+        .select("id", { count: "exact" });
+
+    if (error) {
+        console.error("Error fetching product count:", error.message);
+        return 0;
+    }
+
+    return data?.length || 0;
+}
+
 export async function searchProductsByName(query: string): Promise<Array<Product>> {
     const { data, error} = await supabase
         .from('products')
