@@ -1,6 +1,5 @@
 import {AdminSidebar} from "@/components/admin/AdminSidebar";
 import {AdminOverview} from "@/components/admin/dashboard/AdminOverview";
-import {Renderable} from "@/utilities/ComponentUtilities";
 import {redirect} from "next/navigation";
 import {isAdmin} from "@/clerk/User";
 
@@ -8,7 +7,7 @@ export default async function AdminPage({
     searchParams,
 }: {
     searchParams: Promise<{ section: string }>
-}): Promise<Renderable> {
+}) {
     const { section } = await searchParams
     const activeSection = section || "overview"
 
