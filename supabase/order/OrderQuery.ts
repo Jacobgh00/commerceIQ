@@ -171,3 +171,27 @@ export async function rollbackOrder(orderId: number) {
         console.error("Rollback failed for order:", rollbackOrderError.message);
     }
 }
+
+export async function getOrders(search?: string, page: number = 1) {
+    const pageSize = 3
+    const from = (page - 1) * pageSize
+    const to = page * pageSize - 1
+
+    const { data, error, count } = await supabase
+        .from("orders")
+        .select("*", { count: "exact" })
+        .or(
+            `order_number.ilike.%${search || ""}%,customer_name.ilike.%${search || ""}%`
+        )
+        .range(from, to)
+
+    if (error) {
+        console.error("Error fetching orders:", error.message);
+        throw new Error("Failed to fetch orders.");
+    }
+
+    return {
+        orders: data || [],
+        totalPages: Math.ceil((count || 0) / pageSize),
+    }
+}

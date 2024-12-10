@@ -22,6 +22,10 @@ export function Header(): Renderable {
     const isAdminPage = pathname.startsWith("/admin");
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
+    function handleNavigation() {
+        setIsSidebarOpen(false)
+    }
+
     return (
         <header className="flex flex-wrap md:flex-nowrap justify-between items-center px-4 py-3 bg-white shadow">
             <div className="flex items-center w-full md:w-auto">
@@ -38,7 +42,11 @@ export function Header(): Renderable {
 
             {!isAdminPage && (
                 <div className="hidden md:block flex-1">
-                    <SearchBar className="w-full sm:w-auto sm:flex-1 sm:mx-4 mt-2 sm:mt-0"/>
+                    <SearchBar
+                        className="w-full sm:w-auto sm:flex-1 sm:mx-4 mt-2 sm:mt-0"
+                        placeholder="Søg efter produkter"
+                        section="products"
+                    />
                 </div>
             )}
 
@@ -71,7 +79,7 @@ export function Header(): Renderable {
                                 <X className="h-6 w-6 text-gray-800" />
                             </button>
                         </div>
-                        <AdminSidebar activeSection={pathname.split("?section=")[1] || "overview"} />
+                        <AdminSidebar activeSection={pathname.split("?section=")[1] || "overview"} onNavigate={handleNavigation} />
                     </div>
 
                     {isSidebarOpen && (

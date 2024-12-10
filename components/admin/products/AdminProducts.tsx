@@ -1,7 +1,7 @@
 import {Product} from "@/supabase/types/ProductType";
 import {getAllProducts, searchProductsByName} from "@/supabase/products/ProductQuery";
 import {SearchBar} from "@/components/header/SearchBar";
-import {ProductTable} from "@/components/admin/products/ProductTable";
+import {ProductTable} from "@/components/admin/products/table/ProductTable";
 
 export async function AdminProducts({
     query
@@ -22,6 +22,8 @@ export async function AdminProducts({
             <SearchBar
                 className="mx-0 my-6 max-w-lg"
                 action="/admin?section=products"
+                placeholder="Søg efter produkter"
+                section="products"
             />
             <ProductTable products={products} />
         </div>

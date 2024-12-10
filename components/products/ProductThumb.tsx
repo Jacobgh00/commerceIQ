@@ -41,10 +41,10 @@ export function ProductThumb(props: {
                 <h2 className="text-lg font-semibold text-gray-800 truncate">
                     {props.product.name}
                 </h2>
-                <p className="prose mt-2 text-sm text-gray-600 line-clamp-2"
+                <div className="prose mt-2 text-sm text-gray-600 line-clamp-2"
                     dangerouslySetInnerHTML={{__html: props.product.description}}
                 >
-                </p>
+                </div>
                 <p className="mt-2 text-lg font-bold text-gray-900">
                     {formatCurrency(props.product.price, "dkk")}
                 </p>

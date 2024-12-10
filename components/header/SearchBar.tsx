@@ -6,19 +6,21 @@ import {Search} from "lucide-react";
 export function SearchBar(props: {
     className?: ClassName
     action?: string
+    placeholder: string
+    section: "products" | "orders"
 }): Renderable {
     return (
         <Form
             action={props.action ?? "/search"}
             className={cn(props.className)}
         >
-            <input type="hidden" name="section" value="products"/>
+            <input type="hidden" name="section" value={props.section} />
 
             <div className="relative">
                 <input
                     type="text"
                     name="query"
-                    placeholder="Søg efter produkter"
+                    placeholder={props.placeholder}
                     className={cn(
                         'bg-gray-100 text-gray-800 px-4 py-2 pl-10 rounded',
                         'focus:outline-none focus:ring-emerald-500 focus:ring-2 focus:ring-opacity-100',

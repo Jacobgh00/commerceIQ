@@ -1,13 +1,13 @@
 import {Product} from "@/supabase/types/ProductType";
-import {ProductRow} from "@/components/admin/products/ProductRow";
+import {ProductRow} from "@/components/admin/products/table/ProductRow";
 
 export function ProductTable(props: {
     products: Array<Product>
 }) {
     return (
         <div className="overflow-x-auto">
-            <table className="min-w-full table-auto">
-                <thead>
+            <table className="min-w-full table-auto border-collapse sm:table">
+                <thead className="hidden sm:table-header-group">
                 <tr className="border-b">
                     <th className="text-left px-4 py-2">Navn</th>
                     <th className="text-left px-4 py-2">Pris</th>

@@ -6,7 +6,6 @@ import {rollbackOrder} from "@/supabase/order/OrderQuery";
 import {revalidatePath} from "next/cache";
 import { v4 as uuid } from "uuid";
 
-
 export async function getAllProducts(): Promise<Array<Product>> {
     const { data, error} = await supabase.from('products').select('*');
 
@@ -136,6 +135,8 @@ export async function DeleteProductAction(formdata: FormData) {
         return
     }
 
+    console.log("Product deleted successfully.");
+
     revalidatePath("/admin?section=products")
 }
 
@@ -190,4 +191,37 @@ export async function CreateProductAction(formdata: FormData) {
     }
 
     revalidatePath("/admin?section=products")
+}
+
+export async function UpdateProductAction(formdata: FormData) {
+    const productId = formdata.get("productId")
+    const name = formdata.get("name")?.toString().trim()
+    const price = parseFloat(formdata.get("price")?.toString() || "0")
+    const stock = parseInt(formdata.get("stock")?.toString() || "0")
+    const description = formdata.get("description")?.toString() || ""
+
+    if (!productId || !name || isNaN(price) || isNaN(stock) || stock < 0) {
+        console.error("Invalid product data", { productId, name, price, stock, description });
+        return;
+    }
+
+    const { error } = await supabase
+        .from("products")
+        .update({
+            name,
+            price,
+            stock,
+            description,
+        })
+        .eq("id", productId);
+
+    if (error) {
+        console.error("Error updating product:", error);
+        return;
+    }
+
+    console.log("Product updated successfully.");
+
+    revalidatePath("/admin?section=products");
+
 }
