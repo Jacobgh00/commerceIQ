@@ -1,6 +1,10 @@
+"use server"
+
 import {Product} from "@/supabase/types/ProductType";
 import {supabase} from "@/supabase/server";
 import {rollbackOrder} from "@/supabase/order/OrderQuery";
+import {revalidatePath} from "next/cache";
+import { v4 as uuid } from "uuid";
 
 export async function getAllProducts(): Promise<Array<Product>> {
     const { data, error} = await supabase.from('products').select('*');
@@ -112,4 +116,112 @@ export async function updateProductStocks(orderId: number, items: Array<{ produc
 
         console.log(`Updated stock for product ID ${item.product_id}: Remaining stock ${newStock}`);
     }
+}
+
+export async function DeleteProductAction(formdata: FormData) {
+    const productId = formdata.get("productId")
+
+    if (!productId) {
+        return
+    }
+
+    const { error } = await supabase
+        .from("products")
+        .delete()
+        .eq("id", productId)
+
+    if (error) {
+        console.error("Error deleting product", error)
+        return
+    }
+
+    console.log("Product deleted successfully.");
+
+    revalidatePath("/admin?section=products")
+}
+
+export async function CreateProductAction(formdata: FormData) {
+    const name = formdata.get("name")?.toString().trim()
+    const price = parseFloat(formdata.get("price")?.toString() || "0")
+    const stock = parseInt(formdata.get("stock")?.toString() || "10")
+    const description = formdata.get("description")?.toString() || ""
+
+    if (!(name && price && stock)) {
+        console.error("Name, price or stock is invalid")
+        return
+    }
+
+    let image_url: string | null = null
+    const file = formdata.get("image") as File | null
+    if (file && file.size > 0) {
+        const filename = `${uuid()}-${file.name}`
+
+        const { data, error } = await supabase
+            .storage
+            .from("products")
+            .upload(filename, file)
+
+        if (error) {
+            console.error("Error uploading image", error)
+            return
+        } else if (data) {
+            const { data: publicUrlData } = supabase.storage
+                .from("products")
+                .getPublicUrl(filename)
+            image_url = publicUrlData?.publicUrl || null
+        }
+    }
+
+    const slug = name.toLowerCase().replace(/\s+/g, "-")
+
+    const { error } = await supabase
+        .from("products")
+        .insert({
+            name,
+            slug,
+            price,
+            stock,
+            description,
+            image_url
+        })
+
+    if (error) {
+        console.error("Error creating product", error)
+        return
+    }
+
+    revalidatePath("/admin?section=products")
+}
+
+export async function UpdateProductAction(formdata: FormData) {
+    const productId = formdata.get("productId")
+    const name = formdata.get("name")?.toString().trim()
+    const price = parseFloat(formdata.get("price")?.toString() || "0")
+    const stock = parseInt(formdata.get("stock")?.toString() || "0")
+    const description = formdata.get("description")?.toString() || ""
+
+    if (!productId || !name || isNaN(price) || isNaN(stock) || stock < 0) {
+        console.error("Invalid product data", { productId, name, price, stock, description });
+        return;
+    }
+
+    const { error } = await supabase
+        .from("products")
+        .update({
+            name,
+            price,
+            stock,
+            description,
+        })
+        .eq("id", productId);
+
+    if (error) {
+        console.error("Error updating product:", error);
+        return;
+    }
+
+    console.log("Product updated successfully.");
+
+    revalidatePath("/admin?section=products");
+
 }

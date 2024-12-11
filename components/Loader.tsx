@@ -1,9 +1,12 @@
-import {Renderable} from "@/utilities/ComponentUtilities";
+import {ClassName, Renderable} from "@/utilities/ComponentUtilities";
+import {cn} from "@/lib/utils";
 
-export function Loader(): Renderable {
+export function Loader(props: {
+    className?: ClassName
+}): Renderable {
     return (
         <div className="flex justify-center items-center h-screen">
-            <div className="animate-spin rounded-full size-32 border-b-2 border-emerald-500"/>
+            <div className={cn("animate-spin rounded-full", props.className)}/>
         </div>
     )
 }

@@ -28,7 +28,13 @@ const nextConfig: NextConfig = {
                 hostname: "i5.walmartimages.com",
                 pathname: "/seo/**",
             },
+            {
+                protocol: "https",
+                hostname: "jorkxgxzvsqjfwnnhlav.supabase.co",
+                pathname: "/storage/v1/object/public/products/**"
+            }
         ],
+
     },
 };
 

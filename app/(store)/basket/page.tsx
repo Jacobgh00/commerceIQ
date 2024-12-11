@@ -24,7 +24,7 @@ export default function BasketPage(): Renderable {
     }, []);
 
     if (!isClient) {
-        return <Loader/>
+        return <Loader className="size-32 border-b-2 border-emerald-500"/>
     }
 
     async function handleCheckout() {

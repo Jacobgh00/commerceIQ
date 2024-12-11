@@ -52,7 +52,7 @@ export default async function ProductPage({
                             Kr. {product.price.toFixed(2)}
                         </div>
                         <div className="prose max-w-none mb-6">
-                            {product.description}
+                            <div dangerouslySetInnerHTML={{__html: product.description}}/>
                         </div>
                     </div>
 
