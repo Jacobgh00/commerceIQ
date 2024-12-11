@@ -145,6 +145,7 @@ export async function CreateProductAction(formdata: FormData) {
     const price = parseFloat(formdata.get("price")?.toString() || "0")
     const stock = parseInt(formdata.get("stock")?.toString() || "10")
     const description = formdata.get("description")?.toString() || ""
+    const categoryId = parseInt(formdata.get("category")?.toString() || "0")
 
     if (!(name && price && stock)) {
         console.error("Name, price or stock is invalid")
@@ -174,7 +175,7 @@ export async function CreateProductAction(formdata: FormData) {
 
     const slug = name.toLowerCase().replace(/\s+/g, "-")
 
-    const { error } = await supabase
+    const { data: product, error: productError } = await supabase
         .from("products")
         .insert({
             name,
@@ -184,10 +185,24 @@ export async function CreateProductAction(formdata: FormData) {
             description,
             image_url
         })
+        .select("id")
+        .single()
 
-    if (error) {
-        console.error("Error creating product", error)
+    if (productError || !product) {
+        console.error("Error creating product", productError)
         return
+    }
+
+   const { error: categoryError } = await supabase
+       .from("product_categories")
+         .insert({
+              product_id: product.id,
+              category_id: categoryId
+         })
+
+    if (categoryError) {
+        console.error("Error associating product with category", categoryError);
+        return;
     }
 
     revalidatePath("/admin?section=products")

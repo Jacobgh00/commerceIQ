@@ -1,11 +1,13 @@
-import {Renderable} from "@/utilities/ComponentUtilities";
 import {CreateProductAction} from "@/supabase/products/ProductQuery";
 import {DescriptionField} from "@/components/admin/products/DescriptionField";
 import Form from "next/form";
 import {CreateProductButton} from "@/components/admin/products/buttons/CreateProductButton";
+import {getAllCategories} from "@/supabase/categories/CategoriesQuery";
 
 
-export function CreateProductForm(): Renderable {
+export async function CreateProductForm() {
+    const categories = await getAllCategories();
+
     return (
         <Form
             action={CreateProductAction}
@@ -46,6 +48,20 @@ export function CreateProductForm(): Renderable {
             <div>
                 <label className="block font-medium mb-1">Billede</label>
                 <input type="file" name="image" className="block w-fit"/>
+            </div>
+
+            <div>
+                <label className="block font-medium mb-1">Kategori</label>
+                <select
+                    name="category"
+                    className="border px-3 py-2 w-56 rounded focus:outline-none focus:ring-emerald-500 focus:ring-2 focus:ring-opacity-100"
+                >
+                    {categories.map((category) => (
+                        <option key={category.id} value={category.id}>
+                            {category.title}
+                        </option>
+                    ))}
+                </select>
             </div>
 
             <DescriptionField />
